@@ -166,6 +166,8 @@ class Run:
 					file=open('DataBase/dob.json','w')#again data file open and remove all data and add a empty dict
 					json.dump({},file)
 					print(self.h_p("All Dates Removed"))
+					self.j_data={}
+					file.close()
 				else:
 					pass
 			except Exception as ex:
@@ -182,7 +184,7 @@ def main(name,d):#main func
 		os.system('clear')
 		ac=DoB.BirthDay(d)
 		rn=Run(ac)
-		print(f'{name} Welcome To Age Calc.\nEnter Your Choise:\n\t1]-Age Calculate chart\n\t2]Find Age\n\t3]-Console\n\t4]-BirthDates\n\t5]-Exit')
+		print(f'{name} Welcome To Age Calc.\nEnter Your Choise:\n\t1]-Age Calculate chart\n\t2]-Find Age\n\t3]-Console\n\t4]-BirthDates\n\t5]-Exit')
 		ask=input('input:')
 		if ask=='1':
 			os.system('clear')
@@ -252,9 +254,16 @@ def main(name,d):#main func
 					rn.data_delete()
 					rn.bd_db(rn.data_dict)
 				elif con=="lis -bd":
-					for p,da in enumerate(rn.j_data.items()):
-						y=da[1].split('/')
-						print(f'\t{p+1}.{da[0]} --> {da[1]} | {rn.obj.agefinder(int(y[-1]))} year')
+					
+					f=open('DataBase/dob.json','r+')
+					dat=json.load(f)
+					if dat!={}:
+						for p,da in enumerate(dat.items()):
+							y=da[1].split('/')
+							print(f'\t{p+1}.{da[0]} --> {da[1]} | {rn.obj.agefinder(int(y[-1]))} year')
+						f.close()
+					else:
+						print(rn.h_p('All Ready Empty'))
 				elif con=="show **more":
 					ask5=input('Enter Name:')
 					if ask5 in rn.data_dict.keys():
@@ -267,6 +276,8 @@ def main(name,d):#main func
 						file=open('DataBase/dob.json','w')
 						json.dump({},file)
 						print(rn.h_p("All Dates Removed"))
+						rn.j_data={}
+						file.close()
 					else:
 						pass
 				elif ("-bits" in con) or ("@heartbit" in con):
